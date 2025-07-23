@@ -2,7 +2,7 @@
 
 namespace App\UseCases\Auth;
 
-use App\Repositories\UserRepository;
+use App\Repositories\User\UserRepository;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 
