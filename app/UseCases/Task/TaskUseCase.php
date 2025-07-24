@@ -38,8 +38,15 @@ class TaskUseCase
         return $this->taskRepository->delete($id);
     }
 
-    public function complete($id)
-    {
-        return $this->taskRepository->update($id, ['completed' => true]);
-    }
+   public function complete($id)
+{
+    // Busca a tarefa atual
+    $task = $this->taskRepository->find($id);
+    
+    // Alterna o status (toggle)
+    $completed = !$task->completed;
+    
+    // Atualiza no banco
+    return $this->taskRepository->update($id, ['completed' => $completed]);
+}
 }

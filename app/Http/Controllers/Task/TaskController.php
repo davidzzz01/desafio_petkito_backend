@@ -1,9 +1,9 @@
 <?php
 
 namespace App\Http\Controllers\Task;
-
-use App\Http\Requests\TaskStoreRequest;
-use App\Http\Requests\TaskUpdateRequest;
+use App\Http\Controllers\Controller;
+use App\Http\Requests\Task\TaskStoreRequest;
+use App\Http\Requests\Task\TaskUpdateRequest;
 use App\UseCases\Task\TaskUseCase;
 use Illuminate\Http\Request;
 

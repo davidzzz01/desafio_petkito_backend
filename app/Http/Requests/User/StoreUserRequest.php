@@ -13,7 +13,7 @@ class StoreUserRequest extends FormRequest
         return [
             'name' => 'required|string|max:191',
             'email' => 'required|email|unique:users,email',
-            'password' => 'required|min:6|confirmed',
+            'password' => 'required|min:6',
             'is_admin' => 'boolean',
         ];
     }

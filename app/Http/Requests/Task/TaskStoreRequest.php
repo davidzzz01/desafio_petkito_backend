@@ -9,7 +9,7 @@ class TaskStoreRequest extends FormRequest
     public function authorize()
     {
         
-        return $this->user() && $this->user()->role === 'admin';
+        return true;
     }
 
     public function rules()
