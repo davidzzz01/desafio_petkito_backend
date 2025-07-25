@@ -75,5 +75,20 @@ public function forReport($user)
     return $this->taskRepository->allForUser($user->id);
 }
 
+public function getAll($perPage, $page)
+{
+    $offset = ($page - 1) * $perPage;
+
+    $total = $this->taskRepository->count();
+    $tasks = $this->taskRepository->allForUser(auth()->id());
+
+    return [
+        'total' => $total,
+        'per_page' => $perPage,
+        'page' => $page,
+        'data' => $tasks,
+    ];
+}
+
 
 }

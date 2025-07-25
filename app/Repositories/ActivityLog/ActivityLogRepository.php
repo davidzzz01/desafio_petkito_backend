@@ -20,4 +20,9 @@ class ActivityLogRepository
     {
         return ActivityLog::where('user_id', $userId)->with('task')->latest()->get();
     }
+
+    public function count()
+    {
+        return ActivityLog::count();
+    }
 } 

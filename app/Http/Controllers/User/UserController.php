@@ -3,13 +3,16 @@
 namespace App\Http\Controllers\User;
 
 use App\Http\Controllers\Controller;
-use App\UseCases\User\UserUseCase;
 use App\Http\Requests\User\StoreUserRequest;
 use App\Http\Requests\User\UpdateUserRequest;
+use App\UseCases\User\UserUseCase;
 use Illuminate\Http\Request;
+use App\Traits\PaginateTrait;
 
 class UserController extends Controller
 {
+    use PaginateTrait;
+
     protected $useCase;
 
     public function __construct(UserUseCase $useCase)
@@ -17,24 +20,39 @@ class UserController extends Controller
         $this->useCase = $useCase;
     }
 
-    public function index()
+    public function index(Request $request)
     {
-        return response()->json($this->useCase->getAll());
+        $perPage = $request->input('per_page', 10);
+        $page = $request->input('page', 1);
+
+        $users = $this->useCase->getAll($perPage, $page);
+
+        $response = $this->paginate(
+            $users['total'],
+            $perPage,
+            $page,
+            $users['data']
+        );
+
+        return response()->json($response);
     }
 
     public function show($id)
     {
-        return response()->json($this->useCase->getById($id));
+        $user = $this->useCase->find($id);
+        return response()->json($user);
     }
 
     public function store(StoreUserRequest $request)
     {
-        return response()->json($this->useCase->create($request->validated()), 201);
+        $user = $this->useCase->create($request->validated());
+        return response()->json($user, 201);
     }
 
     public function update(UpdateUserRequest $request, $id)
     {
-        return response()->json($this->useCase->update($id, $request->validated()));
+        $user = $this->useCase->update($id, $request->validated());
+        return response()->json($user);
     }
 
     public function destroy($id)

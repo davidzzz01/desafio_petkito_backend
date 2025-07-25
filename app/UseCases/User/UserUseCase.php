@@ -20,9 +20,19 @@ class UserUseCase
         return $this->repository->create($data);
     }
 
-    public function getAll()
+    public function getAll($perPage, $page)
     {
-        return $this->repository->all();
+        $offset = ($page - 1) * $perPage;
+
+        $total = $this->repository->count();
+        $users = $this->repository->all();
+
+        return [
+            'total' => $total,
+            'per_page' => $perPage,
+            'page' => $page,
+            'data' => $users,
+        ];
     }
 
     public function getById($id)

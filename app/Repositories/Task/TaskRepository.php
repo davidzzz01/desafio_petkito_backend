@@ -41,12 +41,14 @@ class TaskRepository
 
 public function search($word)
 {
-    $results = DB::select(
-        "SELECT * FROM tasks WHERE title LIKE ?",
-        ['%' . $word . '%']
-    );
+    return Task::where('title', 'like', '%' . $word . '%')
+        ->orWhere('description', 'like', '%' . $word . '%')
+        ->get();
+}
 
-    return collect($results);
+public function count()
+{
+    return Task::count();
 }
 
 

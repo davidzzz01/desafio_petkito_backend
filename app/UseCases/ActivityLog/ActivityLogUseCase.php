@@ -31,4 +31,19 @@ class ActivityLogUseCase
     {
         return $this->repository->byUser($userId);
     }
+
+    public function getAll($perPage, $page)
+    {
+        $offset = ($page - 1) * $perPage;
+
+        $total = $this->repository->count();
+        $logs = $this->repository->all();
+
+        return [
+            'total' => $total,
+            'per_page' => $perPage,
+            'page' => $page,
+            'data' => $logs,
+        ];
+    }
 } 
