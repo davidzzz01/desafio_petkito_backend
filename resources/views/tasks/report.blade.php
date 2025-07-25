@@ -48,7 +48,7 @@
     </style>
 </head>
 <body>
-    <h1>Relatório de Conclusão de Tarefas</h1>
+    <h1>Relatório de Tarefas</h1>
     <table>
         <thead>
             <tr>
