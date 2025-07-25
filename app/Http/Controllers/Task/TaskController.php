@@ -6,6 +6,8 @@ use App\Http\Requests\Task\TaskStoreRequest;
 use App\Http\Requests\Task\TaskUpdateRequest;
 use App\UseCases\Task\TaskUseCase;
 use Illuminate\Http\Request;
+use App\UseCases\ActivityLog\ActivityLogUseCase;
+use Barryvdh\DomPDF\Facade\Pdf;
 
 class TaskController extends Controller
 {
@@ -48,9 +50,56 @@ class TaskController extends Controller
         return response()->json(['message' => 'Deleted']);
     }
 
-    public function complete($id)
+    public function complete($id, ActivityLogUseCase $logUseCase)
     {
         $task = $this->taskUseCase->complete($id);
+        if ($task->completed) {
+            $user = auth()->user();
+            $logUseCase->logConclusion(
+                $user->id,
+                $task->id,
+                "{$user->name} concluiu a tarefa \"{$task->title}\""
+            );
+        }
         return response()->json($task);
+    }
+
+    public function tasksByStatus(Request $request)
+    {
+        $completed = $request->query('completed', false);
+        $tasks = $this->taskUseCase->getByStatus($completed);
+        return response()->json($tasks);
+    }
+
+  public function searchTasks(Request $request)
+{
+    $word = $request->query('q', '');
+    $tasks = $this->taskUseCase->search($word);
+
+    if ($tasks->isEmpty()) {
+        return response()->json(['message' => 'Nenhuma tarefa encontrada.'], 404);
+    }
+
+    return response()->json($tasks);
+}
+
+
+
+
+    public function exportPdf(Request $request)
+    {
+        $user = $request->user();
+
+        $tasks = $this->taskUseCase->forReport($user);
+
+        if ($tasks->isEmpty()) {
+            return response()->json([
+                'message' => 'Nenhuma tarefa encontrada para gerar o relatório.'
+            ], 404);
+        }
+
+        $pdf = Pdf::loadView('tasks.report', ['tasks' => $tasks]);
+
+        return $pdf->download('relatorio_tarefas.pdf');
     }
 }

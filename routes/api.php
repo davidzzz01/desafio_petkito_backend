@@ -5,6 +5,8 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\Task\TaskController;
 use App\Http\Controllers\User\UserController;
+use App\Http\Controllers\ActivityLog\ActivityLogController;
+
 
 
 
@@ -20,7 +22,6 @@ Route::middleware('auth:sanctum')->post('/logout', [AuthController::class, 'logo
 Route::middleware('auth:sanctum')->prefix('users')->group(function () {
     Route::get('/', [UserController::class, 'index']);
     Route::get('/{id}', [UserController::class, 'show']);
-   // Route::post('/', [UserController::class, 'store']);
     Route::put('/{id}', [UserController::class, 'update']);
     Route::delete('/{id}', [UserController::class, 'destroy']);
 });
@@ -33,6 +34,11 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::put('/tasks/{id}', [TaskController::class, 'update']);
     Route::delete('/tasks/{id}', [TaskController::class, 'destroy']);
     Route::put('/tasks/{id}/complete', [TaskController::class, 'complete']);
+    Route::get('/tasks/status', [TaskController::class, 'tasksByStatus']);
+    Route::get('/tasks/search', [TaskController::class, 'searchTasks']);
+    Route::get('/logs', [ActivityLogController::class, 'index']);
+    Route::get('/logs/pdf', [ActivityLogController::class, 'exportPdf']);
+    Route::get('/task/pdf', [TaskController::class, 'exportPdf']);
 });
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();

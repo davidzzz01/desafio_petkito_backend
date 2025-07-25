@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\UseCases\User\UserUseCase;
 use App\Http\Requests\User\StoreUserRequest;
 use App\Http\Requests\User\UpdateUserRequest;
+use Illuminate\Http\Request;
 
 class UserController extends Controller
 {

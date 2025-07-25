@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Repositories\Task;
-
+use Illuminate\Support\Facades\DB;
 use App\Models\Task;
 
 class TaskRepository
@@ -33,4 +33,29 @@ class TaskRepository
         $task = $this->find($id);
         return $task->delete();
     }
+
+    public function getByStatus($completed)
+    {
+        return Task::where('completed', $completed)->get();
+    }
+
+public function search($word)
+{
+    $results = DB::select(
+        "SELECT * FROM tasks WHERE title LIKE ?",
+        ['%' . $word . '%']
+    );
+
+    return collect($results);
+}
+
+
+    public function allWithUser()
+{
+    return Task::with('user')->get();
+}
+
+
+
+
 }
