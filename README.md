@@ -6,7 +6,7 @@ API RESTful em Laravel para gerenciamento de tarefas, usuários e logs de ativid
 
 - **Laravel 10**
 - **PHP 8.1+**
-- **MySQL/PostgreSQL**
+- **MySQL**
 - **Laravel Sanctum** (Autenticação)
 - **DomPDF** (Geração de relatórios)
 - **PHPUnit** (Testes)
